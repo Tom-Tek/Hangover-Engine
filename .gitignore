@@ -1,3 +1,6 @@
 # Build directory
 [Bb]uild/
 [Oo]ut/
+
+# Visual Studio
+.vs/
