@@ -1,3 +1,7 @@
-int main(int argc, char** argv) {
-	return 0;
+#include "Application.h"
+
+int main(int argc, char** argv)
+{
+	Application& app = Application::Singleton();
+	app.Run();
 }
