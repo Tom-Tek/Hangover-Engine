@@ -2,8 +2,6 @@
 
 #include <chrono>
 
-
-
 void Application::Run()
 {
 	auto lastTickStamp = std::chrono::steady_clock::now();
@@ -18,9 +16,11 @@ void Application::Run()
 		PollEvents(deltaTime);
 		PollLayers(deltaTime);
 	}
+
+	Shutdown();
 }
 
-void Application::Shutdown()
+void Application::Quit()
 {
 	m_running = false;
 }
@@ -34,4 +34,15 @@ void Application::PollLayers(const float deltaTime)
 {
 	for (auto& layer : m_layerStack)
 		layer->OnUpdate(deltaTime);
+}
+
+void Application::Shutdown()
+{
+	// Destroy layers while main() is still running, in reverse order
+	// so later layers go before the ones they may depend on
+	while (!m_layerStack.empty())
+	{
+		m_layerStack.back()->OnDetach();
+		m_layerStack.pop_back();
+	}
 }

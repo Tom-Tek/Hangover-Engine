@@ -1,9 +1,9 @@
-#pragma  once
+#pragma once
 
-#include <vector>
-#include <iostream>
+#include <memory>
 #include <type_traits>
-#include <forward_list>
+#include <utility>
+#include <vector>
 
 #include "Layer.h"
 
@@ -20,13 +20,14 @@ public:
 	Application& operator=(const Application&) = delete;
 
 	void Run();
-	void Shutdown();
+	void Quit();
 
 	template<typename T, typename... TArgs>
 	requires(std::is_base_of_v<Layer, T>)
 	void PushLayer(TArgs&&... args)
 	{
-		m_layerStack.push_back(std::make_unique<T>(std::forward<TArgs>(args)...));
+		auto& layer = m_layerStack.emplace_back(std::make_unique<T>(std::forward<TArgs>(args)...));
+		layer->OnAttach();
 	}
 
 private:
@@ -35,6 +36,7 @@ private:
 
 	void PollEvents(const float deltaTime);
 	void PollLayers(const float deltaTime);
+	void Shutdown();
 
 	bool m_running = false;
 

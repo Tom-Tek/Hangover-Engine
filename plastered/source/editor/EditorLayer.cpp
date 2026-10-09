@@ -1,17 +1,27 @@
 #include "EditorLayer.h"
 
-#include <QDockWidget>
-#include <QLabel>
-#include <QMenuBar>
 #include <QStatusBar>
 
 EditorLayer::EditorLayer(int& argc, char** argv)
 	: m_qapp(argc, argv)
 {
+}
+
+void EditorLayer::OnAttach()
+{
 	ApplyEditorTheme(m_qapp, m_theme);
 
 	m_window = std::make_unique<EditorWindow>();
 	m_window->show();
+}
+
+void EditorLayer::OnDetach()
+{
+	// Destroy all widgets while QApplication is still alive
+	m_window.reset();
+
+	// Flush any deleteLater() calls queued during teardown
+	QApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
 }
 
 void EditorLayer::OnUpdate(float deltaTime)

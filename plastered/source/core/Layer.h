@@ -7,6 +7,8 @@ public:
 	virtual ~Layer() = default;
 
 public:
-	virtual void OnUpdate(float deltaTime) { }
+	virtual void OnAttach() { }
+	virtual void OnDetach() { }
+	virtual void OnUpdate(const float deltaTime) { }
 
 };

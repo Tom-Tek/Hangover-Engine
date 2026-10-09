@@ -2,6 +2,7 @@
 #include "core/Globals.h"
 #include "core/Application.h"
 
+#include <format>
 #include <string>
 
 EditorWindow::EditorWindow()
@@ -15,5 +16,5 @@ EditorWindow::EditorWindow()
 void EditorWindow::closeEvent(QCloseEvent* event)
 {
 	event->accept();
-	Application::Singleton().Shutdown();
+	Application::Singleton().Quit();
 }

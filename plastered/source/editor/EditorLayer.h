@@ -8,7 +8,6 @@
 #include <memory>
 
 #include <QApplication>
-#include <QMainWindow>
 
 class EditorLayer : public Layer
 {
@@ -16,6 +15,8 @@ public:
 	// argc must be a reference: QApplication keeps it for its whole lifetime
 	EditorLayer(int& argc, char** argv);
 
+	void OnAttach() override;
+	void OnDetach() override;
 	void OnUpdate(float deltaTime) override;
 
 private:
