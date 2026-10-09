@@ -1,11 +1,11 @@
 #include "Application.h"
-#include "EditorLayer.h"
+#include "editor/EditorLayer.h"
 
 int main(int argc, char** argv)
 {
 	Application& app = Application::Singleton();
 
-	app.PushLayer<EditorLayer>();
+	app.PushLayer<EditorLayer>(argc, argv);
 
 	app.Run();
 }

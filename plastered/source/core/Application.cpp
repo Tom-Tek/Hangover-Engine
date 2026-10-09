@@ -20,6 +20,11 @@ void Application::Run()
 	}
 }
 
+void Application::Shutdown()
+{
+	m_running = false;
+}
+
 void Application::PollEvents(const float deltaTime)
 {
 	// Filler function for now

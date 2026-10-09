@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <type_traits>
+#include <forward_list>
 
 #include "Layer.h"
 
@@ -19,12 +20,13 @@ public:
 	Application& operator=(const Application&) = delete;
 
 	void Run();
+	void Shutdown();
 
-	template<typename T>
+	template<typename T, typename... TArgs>
 	requires(std::is_base_of_v<Layer, T>)
-	void PushLayer()
+	void PushLayer(TArgs&&... args)
 	{
-		m_layerStack.push_back(std::make_unique<T>());
+		m_layerStack.push_back(std::make_unique<T>(std::forward<TArgs>(args)...));
 	}
 
 private:
