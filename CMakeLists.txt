@@ -32,6 +32,11 @@ function(copy_qt_dlls target)
 endfunction()
 
 # ------------------------------------------
+# Submodules
+# ------------------------------------------
+#add_subdirectory(submodules/EASTL)
+
+# ------------------------------------------
 # Projects
 # ------------------------------------------
 add_subdirectory(plastered)
