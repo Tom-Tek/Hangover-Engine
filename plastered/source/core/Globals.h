@@ -6,10 +6,10 @@
 
 namespace
 {
-	uint32_t k_EditorVersion	= 101;
-	uint32_t k_RuntimeVersion	= 101;
+	inline constexpr uint32_t k_EditorVersion = 101;
+	inline constexpr uint32_t k_RuntimeVersion = 101;
 
-	std::string FormatVersion(const uint32_t ver)
+	inline std::string FormatVersion(const uint32_t ver)
 	{
 		std::string digits = std::to_string(ver);
 		while (digits.length() < 3)
