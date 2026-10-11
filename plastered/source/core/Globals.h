@@ -6,8 +6,8 @@
 
 namespace
 {
-	uint32_t k_EditorVersion	= 100;
-	uint32_t k_RuntimeVersion	= 100;
+	uint32_t k_EditorVersion	= 101;
+	uint32_t k_RuntimeVersion	= 101;
 
 	std::string FormatVersion(const uint32_t ver)
 	{
