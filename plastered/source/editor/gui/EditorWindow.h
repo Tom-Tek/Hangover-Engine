@@ -7,8 +7,9 @@ class EditorWindow : public QMainWindow
 {
 	Q_OBJECT
 public:
-	EditorWindow();
+	explicit EditorWindow();
 
 private:
 	void closeEvent(QCloseEvent* event) override;
+	QDockWidget* AddDock(const QString& title, QWidget* content, Qt::DockWidgetArea area);
 };

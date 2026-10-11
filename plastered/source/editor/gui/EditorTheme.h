@@ -10,22 +10,26 @@ class QApplication;
 struct EditorTheme
 {
 	// Surfaces
-	QColor window        { 37, 37, 38 };    // panels, toolbars, dock backgrounds
-	QColor base          { 27, 27, 28 };    // trees, lists, input fields
-	QColor alternateBase { 32, 32, 33 };    // alternating rows
-	QColor raised        { 55, 55, 57 };    // buttons, tabs
-	QColor sectionHeader { 74, 74, 76 };    // collapsible section bars
-	QColor groupBox      { 31, 31, 32 };    // inset boxes inside sections
-	QColor border        { 18, 18, 18 };
+	QColor window        { 42, 42, 44 };    // panels, toolbars, dock backgrounds
+	QColor base          { 30, 30, 32 };    // trees, lists, input fields
+	QColor alternateBase { 35, 35, 37 };    // alternating rows
+	QColor raised        { 58, 58, 62 };    // buttons, tabs, hovered controls
+	QColor titleBar      { 34, 34, 36 };    // menu bar, status bar
+	QColor dockTitle     { 56, 56, 60 };    // dock title bars, column headers
+	QColor sectionHeader { 64, 64, 68 };    // collapsible section bars
+	QColor groupBox      { 38, 38, 40 };    // inset boxes inside sections
+	QColor border        { 22, 22, 24 };
+	QColor borderHover   { 92, 92, 98 };
+	QColor hover         { 255, 255, 255, 12 }; // translucent wash over hovered rows
 
 	// Text
-	QColor text          { 200, 200, 200 };
-	QColor textDim       { 140, 140, 140 };
-	QColor textDisabled  { 95, 95, 95 };
+	QColor text          { 204, 204, 204 };
+	QColor textDim       { 140, 140, 145 };
+	QColor textDisabled  { 95, 95, 98 };
 	QColor textBright    { 245, 245, 245 };
 
 	// Accents
-	QColor accent        { 46, 112, 178 };  // selection, focus
+	QColor accent        { 51, 102, 165 };  // selection, focus
 	QColor accentText    { 255, 255, 255 };
 	QColor link          { 95, 200, 85 };   // asset/decl references
 	QColor iconGreen     { 120, 200, 95 };
@@ -59,14 +63,16 @@ struct EditorTheme
 
 	// Metrics
 	int iconSize            = 16;
-	int toolbarIconSize     = 18;
+	int toolbarIconSize     = 16;
 	int modeIconSize        = 26;
 	int layoutSpacing       = 4;
 	int layoutMargin        = 4;
 	int splitterWidth       = 3;
-	int rowHeight           = 20;
+	int rowHeight           = 18;
 	int treeIndent          = 14;
 	int sectionHeaderHeight = 20;
+	int propertyLabelWidth  = 100;
+	int cornerRadius        = 0;
 	int sliderThickness     = 14;
 	int sliderHandleLength  = 9;
 };
