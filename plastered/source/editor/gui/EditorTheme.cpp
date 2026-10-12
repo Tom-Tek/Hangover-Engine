@@ -370,6 +370,31 @@ QStatusBar QLabel {
 QLabel#PropertyLabel, QLabel#KindLabel, QLabel#EmptyHint, QLabel#ToolBarLabel {
 	color: $textDim;
 }
+
+QWidget#editor_titleBar {
+	background: $titleBar;
+	border-bottom: 1px solid $border;
+}
+QLabel#editor_titleBarTitle {
+	color: $textDim;
+}
+QPushButton#editor_titleBarMinimize, QPushButton#editor_titleBarMaximize, QPushButton#editor_titleBarClose {
+	background: transparent;
+	border: none;
+	border-radius: 0;
+	padding: 0;
+	color: $text;
+}
+QPushButton#editor_titleBarMinimize:hover, QPushButton#editor_titleBarMaximize:hover {
+	background: $raised;
+}
+QPushButton#editor_titleBarMinimize:pressed, QPushButton#editor_titleBarMaximize:pressed {
+	background: $borderHover;
+}
+QPushButton#editor_titleBarClose:hover, QPushButton#editor_titleBarClose:pressed {
+	background: $closeHover;
+	color: $textBright;
+}
 )qss";
 
 	QString MakeStyleSheet(const EditorTheme& theme)
@@ -389,6 +414,7 @@ QLabel#PropertyLabel, QLabel#KindLabel, QLabel#EmptyHint, QLabel#ToolBarLabel {
 			{ "$textBright",   Css(theme.textBright) },
 			{ "$accent",       Css(theme.accent) },
 			{ "$accentText",   Css(theme.accentText) },
+			{ "$closeHover",   Css(theme.closeHover) },
 			{ "$radius",       Px(theme.cornerRadius) },
 			{ "$rowHeight",    Px(theme.rowHeight) },
 			{ "$splitter",     Px(theme.splitterWidth) },

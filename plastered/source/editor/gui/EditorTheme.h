@@ -36,6 +36,7 @@ struct EditorTheme
 	QColor iconFolder    { 225, 190, 80 };
 	QColor iconNeutral   { 210, 210, 210 };
 	QColor record        { 215, 40, 40 };
+	QColor closeHover    { 196, 43, 28 };  // title bar close button
 	QColor axisX         { 220, 75, 65 };
 	QColor axisY         { 105, 200, 85 };
 	QColor axisZ         { 85, 135, 230 };

@@ -1,7 +1,18 @@
 #include "EditorLayer.h"
 
+namespace
+{
+	// Application-wide Qt settings that must be applied before QApplication exists
+	int& PrepareQApplication(int& argc)
+	{
+		// Required by QWindowKit's custom title bar
+		QApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
+		return argc;
+	}
+}
+
 EditorLayer::EditorLayer(int& argc, char** argv)
-	: m_qapp(argc, argv)
+	: m_qapp(PrepareQApplication(argc), argv)
 {
 }
 
