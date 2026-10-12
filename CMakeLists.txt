@@ -32,9 +32,21 @@ function(copy_qt_dlls target)
 endfunction()
 
 # ------------------------------------------
-# Submodules
+# Thirdparty (prebuilt)
 # ------------------------------------------
-#add_subdirectory(submodules/EASTL)
+set(THIRDPARTY_DIR ${CMAKE_SOURCE_DIR}/thirdparty)
+
+# EASTL is prebuilt once into thirdparty/eastl, Debug and Release flavours
+add_library(EASTL STATIC IMPORTED GLOBAL)
+set_target_properties(EASTL PROPERTIES
+    IMPORTED_CONFIGURATIONS "DEBUG;RELEASE"
+    IMPORTED_LOCATION_DEBUG ${THIRDPARTY_DIR}/eastl/lib/Debug/EASTL.lib
+    IMPORTED_LOCATION_RELEASE ${THIRDPARTY_DIR}/eastl/lib/Release/EASTL.lib
+    MAP_IMPORTED_CONFIG_RELWITHDEBINFO Release
+    MAP_IMPORTED_CONFIG_MINSIZEREL Release
+    INTERFACE_INCLUDE_DIRECTORIES ${THIRDPARTY_DIR}/eastl/include
+    INTERFACE_SOURCES ${THIRDPARTY_DIR}/eastl/EASTL.natvis
+)
 
 # ------------------------------------------
 # Projects
