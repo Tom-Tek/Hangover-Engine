@@ -51,4 +51,5 @@ set_target_properties(EASTL PROPERTIES
 # ------------------------------------------
 # Projects
 # ------------------------------------------
+add_subdirectory(core)
 add_subdirectory(plastered)

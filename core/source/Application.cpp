@@ -1,6 +1,12 @@
-#include "Application.h"
+#include "core/Application.h"
 
 #include <chrono>
+
+Application& Application::Singleton()
+{
+	static Application instance;
+	return instance;
+}
 
 void Application::Run()
 {

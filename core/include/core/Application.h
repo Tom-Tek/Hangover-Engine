@@ -5,16 +5,14 @@
 #include <utility>
 #include <vector>
 
+#include "Core.h"
 #include "Layer.h"
 
-class Application
+class CORE_API Application
 {
 public:
-	static Application& Singleton() 
-	{
-		static Application instance;
-		return instance;
-	}
+	// Defined in the DLL so every module shares the same instance
+	static Application& Singleton();
 
 	Application(const Application&) = delete;
 	Application& operator=(const Application&) = delete;
@@ -40,5 +38,8 @@ private:
 
 	bool m_running = false;
 
+#pragma warning(push)
+#pragma warning(disable: 4251) // std types in an exported class, safe while all modules share a CRT
 	std::vector<std::unique_ptr<Layer>> m_layerStack;
+#pragma warning(pop)
 };

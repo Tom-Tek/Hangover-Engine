@@ -13,6 +13,7 @@ qt_add_executable(plastered ${PLASTERED_SOURCES} ${PLASTERED_HEADERS})
 
 target_include_directories(plastered PUBLIC source)
 
+target_link_libraries(plastered PRIVATE core)
 target_link_libraries(plastered PRIVATE Qt6::Core)
 target_link_libraries(plastered PRIVATE Qt6::Widgets)
 

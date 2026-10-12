@@ -1,4 +1,4 @@
-#include "Application.h"
+#include "core/Application.h"
 #include "editor/EditorLayer.h"
 
 int main(int argc, char** argv)

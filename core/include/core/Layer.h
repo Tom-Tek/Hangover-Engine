@@ -1,6 +1,8 @@
 #pragma once
 
-class Layer
+#include "Core.h"
+
+class CORE_API Layer
 {
 public:
 	Layer() = default;
