@@ -48,8 +48,16 @@ set_target_properties(EASTL PROPERTIES
     INTERFACE_SOURCES ${THIRDPARTY_DIR}/eastl/EASTL.natvis
 )
 
+# enact only ships a Release (/MD) build, see liquor/CMakeLists.txt
+add_library(enact STATIC IMPORTED GLOBAL)
+set_target_properties(enact PROPERTIES
+    IMPORTED_LOCATION ${THIRDPARTY_DIR}/enact/lib/enact.lib
+    INTERFACE_INCLUDE_DIRECTORIES ${THIRDPARTY_DIR}/enact/include
+)
+
 # ------------------------------------------
 # Projects
 # ------------------------------------------
 add_subdirectory(core)
 add_subdirectory(plastered)
+add_subdirectory(liquor)
