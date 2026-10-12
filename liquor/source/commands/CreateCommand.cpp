@@ -1,6 +1,7 @@
 #include "CreateCommand.h"
 
 #include "core/Globals.h"
+#include "utils/Paths.h"
 
 #include <fstream>
 #include <iostream>
@@ -11,8 +12,10 @@ namespace fs = std::filesystem;
 
 namespace
 {
-	// HANGOVER_RESOURCES_DIR is set by CMake to the repository's resources folder
-	const fs::path k_ProjectTemplatesDir = fs::path(HANGOVER_RESOURCES_DIR) / "project-templates";
+	fs::path GetProjectTemplatesDir()
+	{
+		return GetResourcesDir() / "project-templates";
+	}
 
 	// Used for both project and template names, so neither can escape its parent folder
 	bool IsValidName(std::string_view name)
@@ -35,12 +38,32 @@ namespace
 		return name.back() != ' ';
 	}
 
+	// "My Game-2" -> "MY_GAME_2", usable in macro names such as {PROJECT_NAME_UPPER}_API
+	std::string ToUpperIdentifier(std::string_view name)
+	{
+		std::string identifier;
+		if (!name.empty() && name[0] >= '0' && name[0] <= '9')
+			identifier += '_';
+
+		for (const char c : name)
+		{
+			if (c >= 'a' && c <= 'z')
+				identifier += static_cast<char>(c - 'a' + 'A');
+			else if ((c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))
+				identifier += c;
+			else
+				identifier += '_';
+		}
+
+		return identifier;
+	}
+
 	void PrintAvailableTemplates()
 	{
 		std::cerr << "Available templates:";
 
 		std::error_code ec;
-		for (const fs::directory_entry& entry : fs::directory_iterator(k_ProjectTemplatesDir, ec))
+		for (const fs::directory_entry& entry : fs::directory_iterator(GetProjectTemplatesDir(), ec))
 		{
 			if (entry.is_directory(ec))
 				std::cerr << ' ' << entry.path().filename().string();
@@ -65,8 +88,14 @@ void CreateCommand::Execute(std::string name, std::string location, std::string 
 
 	std::error_code ec;
 
+	if (!fs::is_directory(GetProjectTemplatesDir(), ec))
+	{
+		std::cerr << "Project templates not found at '" << GetProjectTemplatesDir().string() << "'. Keep the resources folder next to liquor.\n";
+		return;
+	}
+
 	// Checked before anything is written, so a typo never leaves a half-made project behind
-	const fs::path templateDir = k_ProjectTemplatesDir / templateName;
+	const fs::path templateDir = GetProjectTemplatesDir() / templateName;
 	if (!IsValidName(templateName) || !fs::is_directory(templateDir, ec))
 	{
 		std::cerr << "Unknown project template '" << templateName << "'.\n";
@@ -104,7 +133,9 @@ void CreateCommand::DefineVariables(const std::string& name)
 {
 	m_variables = {
 		{ "PROJECT_NAME", name },
+		{ "PROJECT_NAME_UPPER", ToUpperIdentifier(name) },
 		{ "ENGINE_VERSION", FormatVersion(k_RuntimeVersion) },
+		{ "EDITOR_VERSION", FormatVersion(k_EditorVersion) },
 	};
 }
 

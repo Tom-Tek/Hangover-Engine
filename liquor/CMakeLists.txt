@@ -16,8 +16,6 @@ target_include_directories(liquor PUBLIC source)
 target_link_libraries(liquor PRIVATE enact)
 target_link_libraries(liquor PRIVATE EASTL)
 
-target_compile_definitions(liquor PRIVATE HANGOVER_RESOURCES_DIR="${CMAKE_SOURCE_DIR}/resources")
-
 # Header-only access to core (Globals); linking the core DLL would mix CRTs, see below
 target_include_directories(liquor PRIVATE $<TARGET_PROPERTY:core,INTERFACE_INCLUDE_DIRECTORIES>)
 

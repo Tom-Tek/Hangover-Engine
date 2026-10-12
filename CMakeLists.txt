@@ -72,3 +72,13 @@ set_target_properties(enact PROPERTIES
 add_subdirectory(core)
 add_subdirectory(plastered)
 add_subdirectory(liquor)
+
+# ------------------------------------------
+# resources: copied next to the executables so tools never depend on the source tree
+# Runs on every build; edits to resources/ need a build to show up.
+# ------------------------------------------
+add_custom_target(resources ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+        ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:liquor>/resources
+    COMMENT "Copying resources next to the executables"
+)
