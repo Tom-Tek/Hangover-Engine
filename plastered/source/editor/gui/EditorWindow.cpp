@@ -30,9 +30,23 @@ EditorWindow::EditorWindow()
 	{
 		m_explorerWindow = new ExplorerWindow();
 		addDockWidget(Qt::LeftDockWidgetArea, m_explorerWindow);
+		m_explorerWindow->show();
 
 		m_propertiesWindow = new PropertiesWindow();
 		addDockWidget(Qt::LeftDockWidgetArea, m_propertiesWindow);
+		m_propertiesWindow->show();
+
+		m_packagerWindow = new PackagerWindow();
+		m_packagerWindow->hide();
+
+		QAction* packageGameAction = m_menuBar->FileMenu->addAction("Package Game");
+		connect(packageGameAction, &QAction::triggered, this, [this]
+			{
+				m_packagerWindow->show();
+				m_packagerWindow->raise();
+				m_packagerWindow->activateWindow();
+			}
+		);
 	}
 }
 

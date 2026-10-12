@@ -3,6 +3,7 @@
 #include <QMenuBar>
 
 #include <vector>
+#include <iostream>
 
 class EditorMenubar : public QMenuBar
 {
@@ -10,6 +11,5 @@ class EditorMenubar : public QMenuBar
 public:
 	explicit EditorMenubar();
 
-private:
-	QMenu* m_fileMenu;
+	QMenu* FileMenu;
 };
