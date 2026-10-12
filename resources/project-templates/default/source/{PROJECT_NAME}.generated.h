@@ -1,3 +1,5 @@
+// Do NOT Modify OR Delete! Unless you know what you're doing of course :)
+
 // --------------------------------------------- \\
 // Auto Generated File created by Hangover Engine
 //		- Target Project: {PROJECT_NAME}
