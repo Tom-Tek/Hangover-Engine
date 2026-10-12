@@ -1,8 +1,13 @@
 #include "core/Application.h"
 #include "editor/EditorLayer.h"
 
+#include "shared/EngineRegistration.h"
+
 int main(int argc, char** argv)
 {
+	// Keeps HANGOVER_BIN pointing at the most recently launched engine
+	RegisterEngine();
+
 	Application& app = Application::Singleton();
 
 	app.PushLayer<EditorLayer>(argc, argv);

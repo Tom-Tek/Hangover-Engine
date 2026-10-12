@@ -13,6 +13,7 @@ add_executable(liquor ${LIQUOR_SOURCES} ${LIQUOR_HEADERS})
 
 target_include_directories(liquor PUBLIC source)
 
+target_link_libraries(liquor PRIVATE shared)
 target_link_libraries(liquor PRIVATE enact)
 target_link_libraries(liquor PRIVATE EASTL)
 
