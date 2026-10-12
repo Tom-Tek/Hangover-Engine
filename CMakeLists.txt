@@ -96,6 +96,7 @@ endif()
 # ------------------------------------------
 add_subdirectory(toolkit)
 add_subdirectory(core)
+add_subdirectory(gamemodule)
 add_subdirectory(plastered)
 add_subdirectory(liquor)
 
@@ -129,7 +130,7 @@ add_custom_target(resources ALL
 # ------------------------------------------
 # bin export: runs on every build so header-only edits are picked up too.
 # Add new game-facing libraries (e.g. Yeast) here.
-#   resources/sdk/  engine files exported as-is (premake/hangover.lua, source/GameModule.cpp)
+#   resources/sdk/  engine files exported as-is (premake/hangover.lua)
 #   premake5        the generator projects run through $HANGOVER_BIN/premake
 # ------------------------------------------
 if(WIN32)
@@ -165,9 +166,10 @@ add_custom_target(bin ALL
         $<TARGET_LINKER_FILE:core>
         $<$<CONFIG:Debug,RelWithDebInfo>:$<TARGET_PDB_FILE:core>>
         $<TARGET_FILE:EASTL>
+        $<TARGET_FILE:gamemodule>
         ${HANGOVER_BIN_DIR}
 
     COMMAND_EXPAND_LISTS
     COMMENT "Exporting game SDK to bin/"
 )
-add_dependencies(bin core)
+add_dependencies(bin core gamemodule)

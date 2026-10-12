@@ -58,9 +58,8 @@ function hangover.gamemodule()
 
 	includedirs { path.join(hangover.bin, "include") }
 	libdirs { hangover.bin }
-	links { "hangover-core", "EASTL" }
 
-	-- Engine-owned boilerplate compiled into every game module
-	files { path.join(hangover.bin, "source/GameModule.cpp") }
-	vpaths { ["Engine"] = path.join(hangover.bin, "source/**") }
+	-- hangover-game holds engine-owned code every module needs (e.g. EASTL's allocation
+	-- hooks); it is listed after EASTL because GNU linkers resolve static libraries in order
+	links { "hangover-core", "EASTL", "hangover-game" }
 end

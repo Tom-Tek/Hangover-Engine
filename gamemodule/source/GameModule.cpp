@@ -1,6 +1,7 @@
 // ------------------------------------------
-// Hangover Engine: compiled into every game module by hangover.lua.
-// Engine-owned; edits here are overwritten on the next engine build.
+// Hangover Engine: engine-owned code every game module needs.
+// Built once into bin/hangover-game.lib, which hangover.lua links into every game,
+// so it never appears (or gets edited) inside game projects.
 // ------------------------------------------
 
 #include <cstddef>
