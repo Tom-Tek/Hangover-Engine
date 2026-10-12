@@ -15,6 +15,7 @@ target_include_directories(plastered PUBLIC source)
 
 target_link_libraries(plastered PRIVATE core)
 target_link_libraries(plastered PRIVATE Qt6::Core)
+target_link_libraries(plastered PRIVATE Qt6::Gui)
 target_link_libraries(plastered PRIVATE Qt6::Widgets)
 
-copy_qt_dlls(plastered)
+deploy_qt(plastered)

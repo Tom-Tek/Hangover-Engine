@@ -12,20 +12,31 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # ------------------------------------------
 # Qt Packages
 # ------------------------------------------
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
 qt_standard_project_setup()
 
 # ------------------------------------------
-# Helper: copy Qt DLLs next to an exe after build
+# Helper: deploy Qt next to an exe after build
+# windeployqt copies the Qt DLLs and every plugin the exe needs (platforms, styles, imageformats, ...)
 # ------------------------------------------
-function(copy_qt_dlls target)
+find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT6_INSTALL_PREFIX}/${QT6_INSTALL_BINS}" REQUIRED)
+
+function(deploy_qt target)
     if(WIN32)
         add_custom_command(TARGET ${target} POST_BUILD
+            # Non-Qt DLLs this exe links, e.g. core
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 $<TARGET_RUNTIME_DLLS:${target}> $<TARGET_FILE_DIR:${target}>
-            COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${target}>/platforms
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                $<TARGET_FILE:Qt6::QWindowsIntegrationPlugin> $<TARGET_FILE_DIR:${target}>/platforms
+            COMMAND ${WINDEPLOYQT_EXECUTABLE}
+                $<IF:$<CONFIG:Debug>,--debug,--release>
+                --no-translations
+                --no-compiler-runtime
+                --no-system-d3d-compiler
+                --no-opengl-sw
+                --no-system-dxc-compiler
+                --skip-plugin-types tls,networkinformation,generic
+                --verbose 0
+                $<TARGET_FILE:${target}>
             COMMAND_EXPAND_LISTS
         )
     endif()
