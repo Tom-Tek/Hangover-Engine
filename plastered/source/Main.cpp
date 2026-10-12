@@ -1,7 +1,7 @@
 #include "core/Application.h"
 #include "editor/EditorLayer.h"
 
-#include "shared/EngineRegistration.h"
+#include "toolkit/EngineRegistration.h"
 
 int main(int argc, char** argv)
 {

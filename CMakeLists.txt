@@ -86,7 +86,7 @@ set(HANGOVER_BIN_DIR ${CMAKE_SOURCE_DIR}/bin CACHE PATH "Where the game SDK (hea
 # ------------------------------------------
 # Projects
 # ------------------------------------------
-add_subdirectory(shared)
+add_subdirectory(toolkit)
 add_subdirectory(core)
 add_subdirectory(plastered)
 add_subdirectory(liquor)

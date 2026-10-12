@@ -2,7 +2,7 @@
 
 #include "commands/CreateCommand.h"
 
-#include "shared/EngineRegistration.h"
+#include "toolkit/EngineRegistration.h"
 
 #include <enact/enact.h>
 
