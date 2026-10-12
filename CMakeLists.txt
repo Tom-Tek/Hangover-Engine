@@ -82,3 +82,40 @@ add_custom_target(resources ALL
         ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:liquor>/resources
     COMMENT "Copying resources next to the executables"
 )
+
+# ------------------------------------------
+# bin: everything game code may use, next to the other build output
+#   bin/include   headers
+#   bin/          .dll / .lib / .pdb
+# Runs on every build so header-only edits are picked up too.
+# Add new game-facing libraries (e.g. Yeast) here.
+# ------------------------------------------
+set(HANGOVER_BIN_DIR ${CMAKE_BINARY_DIR}/bin)
+
+# Multi-config generators (e.g. the Visual Studio generator) share one build folder
+get_property(IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+if(IS_MULTI_CONFIG)
+    set(HANGOVER_BIN_DIR ${HANGOVER_BIN_DIR}/$<CONFIG>)
+endif()
+
+add_custom_target(bin ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${HANGOVER_BIN_DIR}/include
+
+    # Headers
+    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+        ${CMAKE_SOURCE_DIR}/core/include ${HANGOVER_BIN_DIR}/include
+    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+        ${THIRDPARTY_DIR}/eastl/include ${HANGOVER_BIN_DIR}/include
+
+    # Libraries (pdb only exists when the configuration has debug info)
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:core>
+        $<TARGET_LINKER_FILE:core>
+        $<$<CONFIG:Debug,RelWithDebInfo>:$<TARGET_PDB_FILE:core>>
+        $<TARGET_FILE:EASTL>
+        ${HANGOVER_BIN_DIR}
+
+    COMMAND_EXPAND_LISTS
+    COMMENT "Exporting game SDK to bin/"
+)
+add_dependencies(bin core)
