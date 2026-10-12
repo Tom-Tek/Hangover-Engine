@@ -102,18 +102,35 @@ add_subdirectory(liquor)
 # ------------------------------------------
 # resources: copied next to the executables so tools never depend on the source tree
 # Runs on every build; edits to resources/ need a build to show up.
+# resources/sdk is for game projects, not the tools: it goes to bin/ instead (see below).
 # ------------------------------------------
+set(TOOL_RESOURCES_DIR $<TARGET_FILE_DIR:liquor>/resources)
+set(RESOURCE_COPY_COMMANDS COMMAND ${CMAKE_COMMAND} -E make_directory ${TOOL_RESOURCES_DIR})
+
+file(GLOB RESOURCE_ENTRIES LIST_DIRECTORIES true CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/resources/*)
+foreach(entry IN LISTS RESOURCE_ENTRIES)
+    get_filename_component(entryName ${entry} NAME)
+    if(entryName STREQUAL "sdk")
+        continue()
+    endif()
+
+    if(IS_DIRECTORY ${entry})
+        list(APPEND RESOURCE_COPY_COMMANDS COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different ${entry} ${TOOL_RESOURCES_DIR}/${entryName})
+    else()
+        list(APPEND RESOURCE_COPY_COMMANDS COMMAND ${CMAKE_COMMAND} -E copy_if_different ${entry} ${TOOL_RESOURCES_DIR})
+    endif()
+endforeach()
+
 add_custom_target(resources ALL
-    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
-        ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:liquor>/resources
+    ${RESOURCE_COPY_COMMANDS}
     COMMENT "Copying resources next to the executables"
 )
 
 # ------------------------------------------
 # bin export: runs on every build so header-only edits are picked up too.
 # Add new game-facing libraries (e.g. Yeast) here.
-#   sdk/        engine files exported as-is (premake/hangover.lua, source/GameModule.cpp)
-#   premake5    the generator projects run through $HANGOVER_BIN/premake
+#   resources/sdk/  engine files exported as-is (premake/hangover.lua, source/GameModule.cpp)
+#   premake5        the generator projects run through $HANGOVER_BIN/premake
 # ------------------------------------------
 if(WIN32)
     set(PREMAKE_EXECUTABLE ${THIRDPARTY_DIR}/premake5/premake5.exe)
@@ -132,7 +149,7 @@ add_custom_target(bin ALL
 
     # Engine-owned SDK files and the project generator
     COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
-        ${CMAKE_SOURCE_DIR}/sdk ${HANGOVER_BIN_DIR}
+        ${CMAKE_SOURCE_DIR}/resources/sdk ${HANGOVER_BIN_DIR}
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${PREMAKE_EXECUTABLE} ${HANGOVER_BIN_DIR}/premake
 
