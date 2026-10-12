@@ -76,12 +76,20 @@ set_target_properties(enact PROPERTIES
 find_package(QWindowKit REQUIRED PATHS ${THIRDPARTY_DIR}/qwindowkit NO_DEFAULT_PATH)
 
 # ------------------------------------------
-# bin: everything game code may use, shared by every configuration
-#   bin/include      headers
-#   bin/<Config>/    .dll / .lib / .pdb
-# HANGOVER_BIN points here (registered by liquor and the editor on launch).
+# bin: everything game code may use, inside this build's output
+#   bin/include   headers
+#   bin/          .dll / .lib / .pdb
+# HANGOVER_BIN points at the bin of the most recently launched build (registered by liquor and
+# the editor on launch), so game code always matches the running editor's configuration.
+# A plain variable on purpose: it overrides the repo-root path older build folders cached.
 # ------------------------------------------
-set(HANGOVER_BIN_DIR ${CMAKE_SOURCE_DIR}/bin CACHE PATH "Where the game SDK (headers and libraries) is exported")
+set(HANGOVER_BIN_DIR ${CMAKE_BINARY_DIR}/bin)
+
+# Multi-config generators (e.g. the Visual Studio generator) share one build folder
+get_property(IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+if(IS_MULTI_CONFIG)
+    set(HANGOVER_BIN_DIR ${HANGOVER_BIN_DIR}/$<CONFIG>)
+endif()
 
 # ------------------------------------------
 # Projects
@@ -106,9 +114,7 @@ add_custom_target(resources ALL
 # Add new game-facing libraries (e.g. Yeast) here.
 # ------------------------------------------
 add_custom_target(bin ALL
-    COMMAND ${CMAKE_COMMAND} -E make_directory
-        ${HANGOVER_BIN_DIR}/include
-        ${HANGOVER_BIN_DIR}/$<CONFIG>
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${HANGOVER_BIN_DIR}/include
 
     # Headers
     COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
@@ -122,9 +128,9 @@ add_custom_target(bin ALL
         $<TARGET_LINKER_FILE:core>
         $<$<CONFIG:Debug,RelWithDebInfo>:$<TARGET_PDB_FILE:core>>
         $<TARGET_FILE:EASTL>
-        ${HANGOVER_BIN_DIR}/$<CONFIG>
+        ${HANGOVER_BIN_DIR}
 
     COMMAND_EXPAND_LISTS
-    COMMENT "Exporting game SDK to ${HANGOVER_BIN_DIR}"
+    COMMENT "Exporting game SDK to bin/"
 )
 add_dependencies(bin core)

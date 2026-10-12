@@ -2,8 +2,5 @@
 [Bb]uild/
 [Oo]ut/
 
-# Exported game SDK
-/bin/
-
 # Visual Studio
 .vs/
