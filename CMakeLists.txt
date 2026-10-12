@@ -13,6 +13,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Qt Packages
 # ------------------------------------------
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
+
+# The static QWindowKit build links Qt's private modules, which Qt 6.10+ only provides when asked for.
+# Private modules tie the editor to this exact Qt build: rebuild thirdparty/qwindowkit when upgrading Qt.
+set(QT_NO_PRIVATE_MODULE_WARNING ON)
+find_package(Qt6 REQUIRED COMPONENTS CorePrivate GuiPrivate WidgetsPrivate)
 qt_standard_project_setup()
 
 # ------------------------------------------
@@ -65,6 +70,10 @@ set_target_properties(enact PROPERTIES
     IMPORTED_LOCATION ${THIRDPARTY_DIR}/enact/lib/enact.lib
     INTERFACE_INCLUDE_DIRECTORIES ${THIRDPARTY_DIR}/enact/include
 )
+
+# QWindowKit (editor only): custom title bar with native snapping, shadows and resizing.
+# Prebuilt static, Debug + Release, and found through its own CMake package.
+find_package(QWindowKit REQUIRED PATHS ${THIRDPARTY_DIR}/qwindowkit NO_DEFAULT_PATH)
 
 # ------------------------------------------
 # Projects
