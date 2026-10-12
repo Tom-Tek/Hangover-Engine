@@ -28,13 +28,8 @@ EditorWindow::EditorWindow()
 
 	// Widget construction
 	{
-		m_explorerWindow = new ExplorerWindow();
-		addDockWidget(Qt::LeftDockWidgetArea, m_explorerWindow);
-		m_explorerWindow->show();
-
-		m_propertiesWindow = new PropertiesWindow();
-		addDockWidget(Qt::LeftDockWidgetArea, m_propertiesWindow);
-		m_propertiesWindow->show();
+		m_explorerWindow = CreateGenericWindow<ExplorerWindow>(Qt::LeftDockWidgetArea);
+		m_propertiesWindow = CreateGenericWindow<PropertiesWindow>(Qt::LeftDockWidgetArea);
 
 		m_packagerWindow = new PackagerWindow();
 		m_packagerWindow->hide();

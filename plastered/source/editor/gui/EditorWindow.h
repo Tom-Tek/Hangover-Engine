@@ -21,6 +21,17 @@ public:
 	explicit EditorWindow();
 
 private:
+	template<typename T>
+	requires(std::is_base_of_v<QDockWidget, T>)
+	T* CreateGenericWindow(Qt::DockWidgetArea dockArea = Qt::NoDockWidgetArea)
+	{
+		T* window = new T();
+		if (dockArea != Qt::NoDockWidgetArea)
+			addDockWidget(dockArea, window);
+		window->show();
+		return window;
+	}
+
 	void closeEvent(QCloseEvent* event) override;
 	QDockWidget* AddDock(const QString& title, QWidget* content, Qt::DockWidgetArea area);
 
