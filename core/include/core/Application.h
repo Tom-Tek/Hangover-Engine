@@ -20,12 +20,25 @@ public:
 	void Run();
 	void Quit();
 
-	template<typename T, typename... TArgs>
-	requires(std::is_base_of_v<Layer, T>)
+	template<typename TLayer, typename... TArgs>
+	requires(std::is_base_of_v<Layer, TLayer>)
 	void PushLayer(TArgs&&... args)
 	{
-		auto& layer = m_layerStack.emplace_back(std::make_unique<T>(std::forward<TArgs>(args)...));
-		layer->OnAttach();
+		auto& layer = m_layerStack.emplace_back(std::make_unique<TLayer>(std::forward<TArgs>(args)...));
+		if (m_running)
+			layer->OnAttach();
+	}
+
+	template<typename TLayer>
+	requires(std::is_base_of_v<Layer, TLayer>)
+	TLayer* GetFirstLayer()
+	{
+		for (auto& layer : m_layerStack)
+		{
+			if (auto* found = dynamic_cast<TLayer*>(layer.get()))
+				return found;
+		}
+		return nullptr;
 	}
 
 private:
@@ -35,7 +48,7 @@ private:
 	void PollEvents(const float deltaTime);
 	void PollLayers(const float deltaTime);
 	void Shutdown();
-
+	
 	bool m_running = false;
 
 #pragma warning(push)

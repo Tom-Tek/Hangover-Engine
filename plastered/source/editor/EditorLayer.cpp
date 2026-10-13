@@ -1,37 +1,34 @@
 #include "EditorLayer.h"
 
-namespace
-{
-	// Application-wide Qt settings that must be applied before QApplication exists
-	int& PrepareQApplication(int& argc)
-	{
-		// Required by QWindowKit's custom title bar
-		QApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
-		return argc;
-	}
-}
+#include "core/Application.h"
+#include "gui/EditorGuiLayer.h"
 
-EditorLayer::EditorLayer(int& argc, char** argv)
-	: m_qapp(PrepareQApplication(argc), argv)
+EditorLayer::EditorLayer(int& argc, char** argv) : 
+	m_projectPath(ReadProjectPath(argc, argv))
 {
 }
 
 void EditorLayer::OnAttach()
 {
-	ApplyEditorTheme(m_qapp, m_theme);
-
-	m_window = std::make_unique<EditorWindow>();
-	m_window->show();
+	// Ensure we have a valid project path; on debug mode ask the user to find the .hang project
+	if (m_projectPath.empty())
+	{
+#ifndef NDEBUG
+		
+#else
+		if (auto* gui = Application::Singleton().GetFirstLayer<EditorGuiLayer>())
+		{
+			gui->ShowCrashDialog("Cannot launch with project path.");
+			Application::Singleton().Quit();
+		}
+		return;
+#endif
+	}
 }
 
-void EditorLayer::OnDetach()
+std::filesystem::path EditorLayer::ReadProjectPath(int argc, char** argv)
 {
-	m_window.reset();
-	QApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
-}
-
-void EditorLayer::OnUpdate(float deltaTime)
-{
-	QApplication::processEvents();
-	QApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+	if (argc > 1)
+		return std::filesystem::path(argv[1]);
+	return std::filesystem::path();
 }

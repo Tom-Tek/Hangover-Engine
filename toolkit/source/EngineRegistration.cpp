@@ -86,7 +86,7 @@ namespace
 		SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nullptr, nullptr);
 		return written;
 	}
-#endif
+#endif // _WIN32
 
 	bool RegisterConfigFile(const fs::path& binDir)
 	{

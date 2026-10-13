@@ -1,6 +1,7 @@
 #include "core/Application.h"
 
 #include <chrono>
+#include <iostream>
 
 Application& Application::Singleton()
 {
@@ -10,9 +11,15 @@ Application& Application::Singleton()
 
 void Application::Run()
 {
-	auto lastTickStamp = std::chrono::steady_clock::now();
-
 	m_running = true;
+
+	// Attach layers pushed before Run(), so a Quit() from OnAttach ends the loop before the first tick.
+	// Layers pushed from inside OnAttach attach themselves, so only the existing ones are walked.
+	const size_t pendingCount = m_layerStack.size();
+	for (size_t i = 0; i < pendingCount; ++i)
+		m_layerStack[i]->OnAttach();
+
+	auto lastTickStamp = std::chrono::steady_clock::now();
 	while (m_running)
 	{
 		auto now = std::chrono::steady_clock::now();
