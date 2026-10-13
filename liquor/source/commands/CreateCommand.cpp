@@ -1,7 +1,7 @@
 #include "CreateCommand.h"
 
 #include "core/Globals.h"
-#include "utils/Paths.h"
+#include "toolkit/Paths.h"
 
 #include <fstream>
 #include <iostream>
@@ -143,7 +143,7 @@ bool CreateCommand::PopulateProject(const std::string& name)
 {
 	return
 		MakeDirectory("content") &&
-		MakeFile(name + ".hangover",
+		MakeFile(name + ".hang",
 			"[project]\n"
 			"name = " + name + "\n"
 			"engine = " + FormatVersion(k_RuntimeVersion) + "\n");

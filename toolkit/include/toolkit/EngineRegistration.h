@@ -4,6 +4,7 @@
 
 // Points the HANGOVER_BIN user environment variable (and the per-user engine config file)
 // at this engine's bin folder, so game projects can find headers and libraries.
+// On Windows it also associates .hang project files with this engine's editor.
 // Called on every liquor/editor launch; the most recently launched engine wins.
 // Only writes when the value changed. Returns false if registration failed.
 bool RegisterEngine();
