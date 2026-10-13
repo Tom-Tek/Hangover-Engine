@@ -1,4 +1,5 @@
 #include "EditorGuiLayer.h"
+#include "EditorGuiLayer.h"
 
 #include "widgets/CrashDialog.h"
 
@@ -31,4 +32,15 @@ void EditorGuiLayer::ShowCrashDialog(const QString& message)
 {
 	CrashDialog dialog(message, m_editorWindow.get());
 	dialog.exec();
+}
+
+std::filesystem::path EditorGuiLayer::GetOpenFileName(QString filter, QString title)
+{
+	const QString path = QFileDialog::getOpenFileName(
+		m_editorWindow.get(),
+		title,
+		QString(),
+		filter
+	);
+	return std::filesystem::path(path.toStdString());
 }

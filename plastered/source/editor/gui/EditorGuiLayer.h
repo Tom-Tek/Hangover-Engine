@@ -6,7 +6,10 @@
 #include "EditorWindow.h"
 
 #include <memory>
+
+#include <QString>
 #include <QApplication>
+#include <QFileDialog>
 
 class EditorGuiLayer : public Layer
 {
@@ -19,6 +22,8 @@ public:
 
 	// Blocks until the user closes the dialog
 	void ShowCrashDialog(const QString& message);
+	
+	std::filesystem::path GetOpenFileName(QString extension, QString title = "Open File");
 
 private:
 	QApplication m_qapp;

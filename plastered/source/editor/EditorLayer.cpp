@@ -13,16 +13,23 @@ void EditorLayer::OnAttach()
 	// Ensure we have a valid project path; on debug mode ask the user to find the .hang project
 	if (m_projectPath.empty())
 	{
-#ifndef NDEBUG
-		
-#else
-		if (auto* gui = Application::Singleton().GetFirstLayer<EditorGuiLayer>())
+		auto* gui = Application::Singleton().GetFirstLayer<EditorGuiLayer>();
+
+#ifdef NDEBUG
+		if (gui)
 		{
-			gui->ShowCrashDialog("Cannot launch with project path.");
-			Application::Singleton().Quit();
+			gui->ShowCrashDialog("Cannot launch without a project path.");
 		}
-		return;
+#else
+		if (gui)
+			m_projectPath = gui->GetOpenFileName("Hangover Project (*.hang)", "Open Hangover Project");
 #endif
+
+		if (m_projectPath.empty())
+		{
+			Application::Singleton().Quit();
+			return;
+		}
 	}
 }
 

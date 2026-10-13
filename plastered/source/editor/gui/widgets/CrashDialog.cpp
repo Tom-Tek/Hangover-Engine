@@ -16,13 +16,20 @@ CrashDialog::CrashDialog(const QString& message, QWidget* parent) :
 	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 	resize(520, 280);
 
+	// Append the launch arguments so the report shows how the editor was started
+	QString report = "Command line arguments:\n";
+	const QStringList args = QCoreApplication::arguments();
+	for (qsizetype i = 0; i < args.size(); ++i)
+		report += QString("  [%1] %2\n").arg(i).arg(args[i]);
+	report += "\n\n" + message;
+
 	auto* layout = new QVBoxLayout(this);
 
 	auto* header = new QLabel("The editor hit an unhandled exception and has to close.", this);
 	header->setWordWrap(true);
 	layout->addWidget(header);
 
-	auto* details = new QPlainTextEdit(message, this);
+	auto* details = new QPlainTextEdit(report, this);
 	details->setReadOnly(true);
 	layout->addWidget(details);
 
@@ -32,6 +39,6 @@ CrashDialog::CrashDialog(const QString& message, QWidget* parent) :
 	close->setDefault(true);
 	layout->addWidget(buttons);
 
-	connect(copy, &QPushButton::clicked, this, [message] { QApplication::clipboard()->setText(message); });
+	connect(copy, &QPushButton::clicked, this, [report] { QApplication::clipboard()->setText(report); });
 	connect(buttons, &QDialogButtonBox::accepted, this, &QDialog::accept);
 }
