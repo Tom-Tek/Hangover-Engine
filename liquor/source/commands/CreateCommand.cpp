@@ -1,7 +1,8 @@
 #include "CreateCommand.h"
 
 #include "core/Globals.h"
-#include "toolkit/Paths.h"
+#include "tools/EditorApplicationFile.h"
+#include "tools/Paths.h"
 
 #include <fstream>
 #include <iostream>
@@ -134,8 +135,8 @@ void CreateCommand::DefineVariables(const std::string& name)
 	m_variables = {
 		{ "PROJECT_NAME", name },
 		{ "PROJECT_NAME_UPPER", ToUpperIdentifier(name) },
-		{ "ENGINE_VERSION", FormatVersion(k_RuntimeVersion) },
-		{ "EDITOR_VERSION", FormatVersion(k_EditorVersion) },
+		{ "ENGINE_VERSION", globals::FormatVersion(globals::k_RuntimeVersion) },
+		{ "EDITOR_VERSION", globals::FormatVersion(globals::k_EditorVersion) },
 	};
 }
 
@@ -143,10 +144,18 @@ bool CreateCommand::PopulateProject(const std::string& name)
 {
 	return
 		MakeDirectory("content") &&
-		MakeFile(name + ".hang",
-			"[project]\n"
-			"name = " + name + "\n"
-			"engine = " + FormatVersion(k_RuntimeVersion) + "\n");
+		MakeHangProject(name);
+}
+
+bool CreateCommand::MakeHangProject(const std::string& name)
+{
+	EditorApplicationFile project;
+	project.name = name.c_str();
+	project.engineVersion = globals::FormatVersion(globals::k_RuntimeVersion).c_str();
+	project.contentPath = m_root / "content";
+	project.sourcePath = m_root / "source";
+
+	return project.SerializeToFile(m_root);
 }
 
 bool CreateCommand::CopyTemplate(const fs::path& templateDir)

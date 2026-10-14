@@ -15,7 +15,7 @@ EditorWindow::EditorWindow()
 
 	setCentralWidget(new QTextEdit(this));
 
-	std::string version = FormatVersion(k_EditorVersion);
+	std::string version = globals::FormatVersion(globals::k_EditorVersion);
 	std::string title = std::format("Plastered Editor - v{}", version);
 	setWindowTitle(QString::fromStdString(title));
 	resize(1600, 900);

@@ -94,7 +94,6 @@ endif()
 # ------------------------------------------
 # Projects
 # ------------------------------------------
-add_subdirectory(toolkit)
 add_subdirectory(core)
 add_subdirectory(plastered)
 add_subdirectory(liquor)

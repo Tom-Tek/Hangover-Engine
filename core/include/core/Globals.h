@@ -4,12 +4,12 @@
 #include <format>
 #include <string>
 
-namespace
+namespace globals
 {
-	inline constexpr uint32_t k_EditorVersion = 101;
-	inline constexpr uint32_t k_RuntimeVersion = 101;
+	inline constexpr uint16_t k_EditorVersion = 101;
+	inline constexpr uint16_t k_RuntimeVersion = 101;
 
-	inline std::string FormatVersion(const uint32_t ver)
+	inline std::string FormatVersion(const uint16_t ver)
 	{
 		std::string digits = std::to_string(ver);
 		while (digits.length() < 3)
@@ -21,5 +21,17 @@ namespace
 			digits[1],
 			digits[2]
 		);
+	}
+
+	inline constexpr uint16_t ToRawVersion(const std::string& ver)
+	{
+		uint16_t raw = 0;
+		for (size_t i = 0; i < ver.length(); i++)
+		{
+			const char c = ver[i];
+			if (c >= '0' && c <= '9')
+				raw = static_cast<uint16_t>(raw * 10 + (c - '0'));
+		}
+		return raw;
 	}
 }

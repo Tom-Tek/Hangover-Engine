@@ -12,12 +12,17 @@
 // HANGOVER_PACKAGED is set by the packaging build: everything is compiled into one exe,
 // and the player's main() starts the runtime. Otherwise the editor loads this project as game.dll,
 // and CMake defines game_EXPORTS while building it.
-#if defined(HANGOVER_PACKAGED)
+#if defined (HANGOVER_PACKAGED)
 	#define {PROJECT_NAME_UPPER}_API
-#elif defined(_WIN32) && defined(game_EXPORTS)
+#elif defined (_WIN32) && defined (game_EXPORTS)
 	#define {PROJECT_NAME_UPPER}_API __declspec(dllexport)
-#elif defined(_WIN32)
+#elif defined (_WIN32)
 	#define {PROJECT_NAME_UPPER}_API __declspec(dllimport)
 #else
 	#define {PROJECT_NAME_UPPER}_API
+#endif
+
+#if defined (HANGOVER_PACKAGED)
+	// TODO!
+	// Build the runtime into this header
 #endif

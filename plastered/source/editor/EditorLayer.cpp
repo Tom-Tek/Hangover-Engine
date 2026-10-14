@@ -1,36 +1,57 @@
 #include "EditorLayer.h"
 
 #include "core/Application.h"
+#include "core/Globals.h"
+
 #include "gui/EditorGuiLayer.h"
 
+#include <iostream>
+
 EditorLayer::EditorLayer(int& argc, char** argv) : 
-	m_projectPath(ReadProjectPath(argc, argv))
+	m_projectFile(ReadProjectPath(argc, argv))
 {
 }
 
 void EditorLayer::OnAttach()
 {
-	// Ensure we have a valid project path; on debug mode ask the user to find the .hang project
-	if (m_projectPath.empty())
+	// Ensure we have a valid project path; on debug mode ask the user to find the .hangproj project
+	if (m_projectFile.empty())
+		m_projectFile = FixProjectPath();
+
+	if (!m_editorAppFile.DeserializeFromFile(m_projectFile))
 	{
-		auto* gui = Application::Singleton().GetFirstLayer<EditorGuiLayer>();
+		if (auto* gui = Application::Singleton().GetFirstLayer<EditorGuiLayer>())
+			gui->ShowCrashDialog("Critical; failed to deserialized .hangproj project file.\n  File may be corrupted.");
+		Application::Singleton().Quit();
+	}
+	
+	if (globals::ToRawVersion(m_editorAppFile.engineVersion.c_str()) != globals::k_EditorVersion)
+	{
+		if (auto* gui = Application::Singleton().GetFirstLayer<EditorGuiLayer>())
+			gui->ShowCrashDialog("Version mismatch; version merging is currently not supported in hangover.");
+		Application::Singleton().Quit();
+	}
+
+
+}
+
+std::filesystem::path EditorLayer::FixProjectPath()
+{
+	std::filesystem::path path = std::filesystem::path();
+
+	auto* gui = Application::Singleton().GetFirstLayer<EditorGuiLayer>();
 
 #ifdef NDEBUG
-		if (gui)
-		{
-			gui->ShowCrashDialog("Cannot launch without a project path.");
-		}
+	if (gui)
+		gui->ShowCrashDialog("Cannot launch without a project path.");
 #else
-		if (gui)
-			m_projectPath = gui->GetOpenFileName("Hangover Project (*.hang)", "Open Hangover Project");
+	if (gui)
+		path = gui->GetOpenFileName("Hangover Project (*.hangproj)", "Open Hangover Project");
 #endif
 
-		if (m_projectPath.empty())
-		{
-			Application::Singleton().Quit();
-			return;
-		}
-	}
+	if (path.empty())
+		Application::Singleton().Quit();
+	return path;
 }
 
 std::filesystem::path EditorLayer::ReadProjectPath(int argc, char** argv)

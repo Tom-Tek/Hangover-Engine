@@ -1,9 +1,11 @@
 #pragma once
 
+#include "core/Core.h"
+
 #include <filesystem>
 
 // Folder containing the running executable
-std::filesystem::path GetExecutableDir();
+CORE_API std::filesystem::path GetExecutableDir();
 
 // resources/ is copied next to the executables by the build, see CMakeLists.txt
-std::filesystem::path GetResourcesDir();
+CORE_API std::filesystem::path GetResourcesDir();

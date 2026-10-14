@@ -35,6 +35,9 @@ private:
 	bool MakeDirectory(const std::filesystem::path& path);
 	bool MakeFile(const std::filesystem::path& path, std::string_view contents = {});
 
+	// Writes <name>.hangproj into the project root
+	bool MakeHangProject(const std::string& name);
+
 	std::filesystem::path m_root;
 	std::unordered_map<std::string, std::string> m_variables;
 };
