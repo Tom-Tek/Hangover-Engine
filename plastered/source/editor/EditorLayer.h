@@ -20,12 +20,14 @@ public:
 	explicit EditorLayer(int& argc, char** argv);
 
 	void OnAttach() override;
-	
+
+	// Prompts the user to create a new scene; user will decide where the scene will be parented to
+	void PromptCreateNewScene();
+
 private:
 	std::filesystem::path m_projectFile;
 	EditorApplicationFile m_editorAppFile;
-	std::unique_ptr<Scene> m_activeScene;
-
+	
 	std::filesystem::path FixProjectPath();
 
 	// argv[1] should always be the path to the project we're opening

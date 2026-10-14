@@ -3,6 +3,8 @@
 #include "core/Application.h"
 #include "core/Globals.h"
 
+#include "editor/EditorLayer.h"
+
 #include <QWKWidgets/widgetwindowagent.h>
 
 #include <QTextEdit>
@@ -34,14 +36,22 @@ EditorWindow::EditorWindow()
 		m_packagerWindow = new PackagerWindow();
 		m_packagerWindow->hide();
 
-		QAction* packageGameAction = m_menuBar->FileMenu->addAction("Package Game");
-		connect(packageGameAction, &QAction::triggered, this, [this]
+		QAction* newSceneAction = m_menuBar->FileMenu->addAction("New Scene");
+		connect(newSceneAction, &QAction::triggered, this, [this]()
+		{
+			if (auto* editorLayer = Application::Singleton().GetFirstLayer<EditorLayer>())
 			{
-				m_packagerWindow->show();
-				m_packagerWindow->raise();
-				m_packagerWindow->activateWindow();
+				editorLayer->PromptCreateNewScene();
 			}
-		);
+		});
+
+		QAction* packageGameAction = m_menuBar->FileMenu->addAction("Package Game");
+		connect(packageGameAction, &QAction::triggered, this, [this]()
+		{
+			m_packagerWindow->show();
+			m_packagerWindow->raise();
+			m_packagerWindow->activateWindow();
+		});
 	}
 }
 

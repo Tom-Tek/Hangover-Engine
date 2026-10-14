@@ -20,11 +20,12 @@ public:
 	void OnDetach() override;
 	void OnUpdate(const float deltaTime) override;
 
-	// Blocks until the user closes the dialog
 	void ShowCrashDialog(const QString& message);
-	
-	std::filesystem::path GetOpenFileName(QString extension, QString title = "Open File");
+	void ShowErrorDialog(const QString& message, const QString& title = "Error");
 
+	std::filesystem::path GetOpenFileName(QString extension, QString title = "Open File");
+	std::filesystem::path GetOpenDirectory(QString title, QString entryDirectory = "");
+	
 private:
 	QApplication m_qapp;
 	EditorTheme m_theme;

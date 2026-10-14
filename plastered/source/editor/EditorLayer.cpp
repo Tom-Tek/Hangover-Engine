@@ -2,6 +2,7 @@
 
 #include "core/Application.h"
 #include "core/Globals.h"
+#include "tools/Paths.h"
 
 #include "gui/EditorGuiLayer.h"
 
@@ -33,6 +34,20 @@ void EditorLayer::OnAttach()
 	}
 
 
+}
+
+void EditorLayer::PromptCreateNewScene()
+{
+	if (auto* gui = Application::Singleton().GetFirstLayer<EditorGuiLayer>())
+	{
+		std::filesystem::path path = gui->GetOpenDirectory("Save New Scene", QString(m_editorAppFile.contentPath.c_str()));
+
+		if (path.empty())
+			return; // It's annoying to throw an error message when just cancelling; silently return instead
+
+		if (!paths::IsInsideDirectory(path, m_editorAppFile.contentPath))
+			gui->ShowErrorDialog("Scenes must be saved inside the project's content folder.");
+	}
 }
 
 std::filesystem::path EditorLayer::FixProjectPath()
